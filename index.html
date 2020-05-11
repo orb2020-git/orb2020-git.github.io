@@ -796,14 +796,277 @@ Signed-off-by: David S. Miller &lt;davem@davemloft.net&gt;
           </ul>
         </section>
         <section>
-          <h2>Where to go from here?</h2>
-          <p>Some slightly more advanced but common commands:</p>
+          <h1>Commit manipulation</h1>
+        </section>
+        <section>
+          <section>
+            <h2>Clone another repo</h2>
+            <p>Let's clone <a href="https://github.com/orb2020-git/big-repo">another repository</a> to use for this section.</p>
+            <pre><code class="console" data-trim>
+$ git clone https://github.com/orb2020-git/big-repo.git
+Cloning into 'big-repo'...
+remote: Enumerating objects: 12, done.
+remote: Counting objects: 100% (12/12), done.
+remote: Compressing objects: 100% (5/5), done.
+remote: Total 12 (delta 0), reused 12 (delta 0), pack-reused 0
+Receiving objects: 100% (12/12), done.
+            </code></pre>
+          </section>
+          <section>
+            <h2>This repository</h2>
+            <pre><code class="console" data-trim>
+$ git log --graph --all --oneline
+* d1f4fcc (HEAD -&gt; master, origin/master, origin/HEAD) Add file3
+| * 367597c (origin/new-file) Add file2
+|/
+* 643aec6 Update file to c
+* 4ec21c7 Update file to b
+* 055cab4 Initial commit
+            </code></pre>
+          </section>
+        </section>
+        <section>
+          <section>
+            <h2>Revert</h2>
+            <p>Create a commit to reverse a previous commit.</p>
+            <pre><code class="console" data-trim>
+$ git log --graph --oneline
+* d1f4fcc (HEAD -&gt; master, origin/master, origin/HEAD) Add file3
+<span class="mark">* 643aec6 Update file to c</span>
+* 4ec21c7 Update file to b
+* 055cab4 Initial commit
+            </code></pre>
+            <p>Suppose we want to revert <span class="mark">this</span> commit.</p>
+          </section>
+          <section>
+            <h2>Revert</h2>
+            <pre><code class="console" data-trim>
+$ git revert 643aec6
+[master 7b73baf] Revert "Update file to c"
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+$ git show
+commit 7b73baf229e2b8db19bc594c450743b50adf649d (HEAD -&gt; master)
+Author: Your Name &lt;your@email.com&gt;
+Date:   Tue May 12 01:21:31 2020 +0800
+
+    Revert "Update file to c"
+
+    This reverts commit 643aec6d2a1b4cd485d678886fc1cef25b15bee0.
+
+diff --git a/file b/file
+index f2ad6c7..6178079 100644
+--- a/file
++++ b/file
+@@ -1 +1 @@
+-c
++b</code></pre>
+          </section>
+        </section>
+        <section>
+          <h2>Reset</h2>
+          <p>Undo <code>git add</code>.</p>
+          <pre><code class="console" data-trim>
+$ echo e &gt; file
+$ git add file
+$ git status
+On branch master
+Changes to be committed:
+  (use "git restore --staged &lt;file&gt;..." to unstage)
+	modified:   file
+$ git reset file
+Unstaged changes after reset:
+M	file
+$ git status
+On branch master
+Changes not staged for commit:
+  (use "git add &lt;file&gt;..." to update what will be committed)
+  (use "git restore &lt;file&gt;..." to discard changes in working directory)
+	modified:   file
+no changes added to commit (use "git add" and/or "git commit -a")
+          </code></pre>
+        </section>
+        <section>
+          <h2>Checkout</h2>
+          <p>Undo changes to a file in the working tree.</p>
+          <pre><code class="console" data-trim>
+$ echo e &gt; file
+$ git status
+On branch master
+Changes not staged for commit:
+  (use "git add &lt;file&gt;..." to update what will be committed)
+  (use "git restore &lt;file&gt;..." to discard changes in working directory)
+	modified:   file
+
+no changes added to commit (use "git add" and/or "git commit -a")
+$ git checkout -- file
+$ git status
+On branch master
+nothing to commit, working tree clean</code></pre>
+        </section>
+        <section>
+          <section>
+            <h2>Cherry-pick</h2>
+            <p>"Pluck" a commit(s) and apply it to your current branch.</p>
+            <pre><code class="console" data-trim>
+$ git log --graph --oneline --all
+* 7b73baf (HEAD -&gt; master) Revert "Update file to c"
+* d1f4fcc (origin/master, origin/HEAD) Add file3
+| <span class="mark">* 367597c (origin/new-file) Add file2</span>
+|/
+* 643aec6 Update file to c
+* 4ec21c7 Update file to b
+* 055cab4 Initial commit
+            </code></pre>
+            <p>We want <span class="mark">this</span> commit to be a child of <code>7b73baf</code>.</p>
+          </section>
+          <section>
+            <h2>Cherry-pick</h2>
+            <pre><code class="console" data-trim>
+$ git cherry-pick 367597c
+[master aff5aa7] Add file2
+ Date: Tue May 12 00:27:26 2020 +0800
+ 1 file changed, 1 insertion(+)
+ create mode 100644 file2
+            </code></pre>
+          </section>
+          <section>
+            <h2>Cherry-pick</h2>
+            <pre><code class="console" data-trim>
+$ git log --graph --oneline --all
+* <span class="mark">aff5aa7 (HEAD -&gt; master) Add file2</span>
+* 7b73baf Revert "Update file to c"
+* d1f4fcc (origin/master, origin/HEAD) Add file3
+| * 367597c (origin/new-file) Add file2
+|/
+* 643aec6 Update file to c
+* 4ec21c7 Update file to b
+* 055cab4 Initial commit
+            </code></pre>
+            <p>Commit plucked!</p>
+          </section>
+        </section>
+        <section>
+          <section>
+            <h2>Reset (2)</h2>
+            <p>Reset also <em>moves</em> a branch. Three modes of reset:</p>
+            <ul>
+              <li>Hard: move the branch, and reset the index (staging area) and working tree.</li>
+              <li>Mixed: move the branch and reset the index, but leave the working tree.</li>
+              <li>Soft: move the branch only.</li>
+            </ul>
+          </section>
+          <section>
+            <h2>Reset (2)</h2>
+            <pre><code class="console" data-trim>
+$ git log --graph --oneline --all
+* aff5aa7 (HEAD -&gt; master) Add file2
+* <span class="mark">7b73baf Revert "Update file to c"</span>
+* d1f4fcc (origin/master, origin/HEAD) Add file3
+| * 367597c (origin/new-file) Add file2
+|/
+* 643aec6 Update file to c
+* 4ec21c7 Update file to b
+* 055cab4 Initial commit
+            </code></pre>
+            <p>We want master to point to <span class="mark">this</span> commit again. (i.e. discard the cherry-pick we did)</p>
+          </section>
+          <section>
+            <h2>Reset (2)</h2>
+            <pre><code class="console" data-trim>
+$ git reset --hard 7b73baf
+HEAD is now at 7b73baf Revert "Update file to c"
+$ git log --graph --all --oneline
+* 7b73baf (HEAD -&gt; master) Revert "Update file to c"
+* d1f4fcc (origin/master, origin/HEAD) Add file3
+| * 367597c (origin/new-file) Add file2
+|/
+* 643aec6 Update file to c
+* 4ec21c7 Update file to b
+* 055cab4 Initial commit
+            </code></pre>
+            <p>Warning: don't do this if you've already pushed!</p>
+          </section>
+        </section>
+        <section>
+          <h2>Rebase</h2>
+          <p>Pluck <em>your current branch</em> and put it on top of another branch.</p>
+          <pre><code class="console" data-trim>
+$ git checkout new-file
+Branch 'new-file' set up to track remote branch 'new-file' from 'origin'.
+Switched to a new branch 'new-file'
+$ git rebase master
+Successfully rebased and updated refs/heads/new-file.
+$ git log --graph --all --oneline
+* 95f989c (HEAD -&gt; new-file) Add file2
+* 7b73baf (master) Revert "Update file to c"
+* d1f4fcc (origin/master, origin/HEAD) Add file3
+| * 367597c (origin/new-file) Add file2
+|/
+* 643aec6 Update file to c
+* 4ec21c7 Update file to b
+* 055cab4 Initial commit
+          </code></pre>
+        </section>
+        <section>
+          <h2>Interactive add</h2>
+          <p>Choose specific changes to stage</p>
+          <pre><code class="console" data-trim>
+$ git add -p
+diff --git a/file b/file
+index 6178079..de98044 100644
+--- a/file
++++ b/file
+@@ -1 +1,3 @@
++a
+ b
++c
+(1/1) Stage this hunk [y,n,q,a,d,s,e,?]? s
+Split into 2 hunks.
+@@ -1 +1,2 @@
++a
+ b
+(1/2) Stage this hunk [y,n,q,a,d,j,J,g,/,e,?]? y
+@@ -1 +2,2 @@
+ b
++c
+(2/2) Stage this hunk [y,n,q,a,d,K,g,/,e,?]? n
+
+$ git diff --staged
+diff --git a/file b/file
+index 6178079..422c2b7 100644
+--- a/file
++++ b/file
+@@ -1 +1,2 @@
++a
+ b
+          </code></pre>
+        </section>
+        <section>
+          <h2>A word on editing history</h2>
+          <p>Some commands, like the last two, allow you to alter the history of a branch.</p>
+          <p>Avoid doing so if you have already pushed those commits, because if you push them again, Git will now treat them as diverging histories and attempt to merge them, leading to potentially large merge conflicts and/or messy histories.</p>
+        </section>
+        <section>
+          <h2>Summary since the last summary</h2>
           <ul class="font75">
-            <li><a href="https://git-scm.com/docs/git-revert"><code>git revert</code></a>: Create a commit to revert a commit</li>
-            <li><a href="https://git-scm.com/docs/git-reset"><code>git reset</code></a>: Unstage files, change the commit a branch is on, etc.</li>
-            <li><a href="https://git-scm.com/docs/git-cherry-pick"><code>git cherry-pick</code></a>: Apply a single commit from another branch</li>
-            <li><a href="https://git-scm.com/docs/git-rebase"><code>git rebase (-i)</code></a>: Rebase a branch onto another</li>
+            <li><a href="https://git-scm.com/docs/git-revert"><code>git revert</code></a>: Revert a commit</li>
+            <li><code><a href="https://git-scm.com/docs/git-reset">git reset</a></code>: Unstage files</li>
+            <li><code><a href="https://git-scm.com/docs/git-checkout">git checkout</a></code>: Checkout files (and also a branch)</li>
+            <li><a href="https://git-scm.com/docs/git-cherry-pick"><code>git cherry-pick</code></a>: Apply commits</li>
+            <li><code><a href="https://git-scm.com/docs/git-reset">git reset</a></code> (2): Move/"reset" a branch</li>
+            <li><a href="https://git-scm.com/docs/git-rebase"><code>git rebase</code></a>: "Rebase" a branch</li>
+            <li><a href="https://git-scm.com/docs/git-add"><code>git add -p</code></a>: Interactively add</li>
+          </ul>
+        </section>
+        <section>
+          <h2>Where to go from here?</h2>
+          <p>Some slightly more advanced commands:</p>
+          <ul class="font75">
+            <li><a href="https://git-scm.com/docs/git-rev-list">Specifying commit ranges</a>: for commands like log, cherry-pick, etc</li>
+            <li><a href="https://git-scm.com/docs/git-rebase"><code>git rebase -i</code></a>: interactive rebase&mdash;edit history</li>
             <li><a href="https://git-scm.com/docs/git-bisect"><code>git bisect</code></a>: Find the first commit with a bug, etc</li>
+            <li><a href="https://git-scm.com/docs/git-submodule"><code>git submodule</code></a>: Include another repository in your current repository</li>
+            <li><a href="https://git-scm.com/docs/git-subtree"><code>git subtree</code></a>: Extract a subdirectory (incl. commit history) into a separate repository</li>
           </ul>
         </section>
         <section class="center">
