@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>Git</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@3.9.2/css/reset.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@3.9.2/css/reveal.min.css">
+
+    <link data-nonprint rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.1/build/styles/monokai.min.css">
+    <link data-nonprint rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@3.9.2/css/theme/black.min.css">
+    <link data-nonprint rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@3.9.2/css/print/paper.min.css">
+
+    <link data-print disabled rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@3.9.2/css/theme/white.min.css">
+    <link data-print disabled rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@3.9.2/css/print/pdf.min.css">
+    <link data-print disabled rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.1/build/styles/github.min.css">
+
+    <!-- Printing and PDF exports -->
+    <script>
+      if (window.location.search.match(/print-pdf/gi)) {
+        [...document.querySelectorAll("[data-nonprint]")].forEach(s => {
+          s.disabled = true;
+        });
+        [...document.querySelectorAll("[data-print]")].forEach(s => {
+          s.disabled = false;
+        });
+      }
+    </script>
+
+    <style>
+      .reveal .slides img.logo-img {
+        background: white;
+        border: 10px solid #fff;
+        border-radius: 10px;
+      }
+
+      .reveal .slides .font120 {
+        font-size: 120%;
+      }
+
+      .reveal .slides .font75 {
+        font-size: 75%;
+      }
+
+      .reveal .slides .font70 {
+        font-size: 70%;
+      }
+
+      .reveal .slides .font45 {
+        font-size: 45%;
+      }
+
+      .reveal .slides .underline {
+        text-decoration: underline;
+      }
+
+      .reveal .slides .mt0 {
+        margin-top: 0;
+      }
+
+      .reveal .slides .mb0 {
+        margin-bottom: 0;
+      }
+
+      .reveal .slides .white-bg {
+        background: white;
+      }
+
+      .reveal .slides section .fragment.mark,
+      .reveal .slides section .fragment.mark-red {
+        opacity: 1;
+        visibility: inherit;
+      }
+
+      .reveal .slides section .fragment.mark.visible,
+      .reveal .slides section .mark:not(.fragment) {
+        background: yellow;
+      }
+
+      .reveal .slides section .fragment.mark.visible,
+      .reveal .slides section .fragment.mark.visible .hljs-string,
+      .reveal .slides section .mark:not(.fragment) {
+        color: black;
+      }
+
+      .reveal .slides section .fragment.mark-red.visible,
+      .reveal .slides section .mark-red:not(.fragment) {
+        background: maroon;
+      }
+
+      .reveal .slides section .fragment.mark-red.visible,
+      .reveal .slides section .fragment.mark-red.visible .hljs-string,
+      .reveal .slides section .mark-red:not(.fragment) {
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <section class="center">
+          <h1>Introduction to Git</h1>
+          <h2>Orbital 2020</h2>
+        </section>
+        <section class="center">
+          <h2>Things you need</h1>
+          <p><a href="https://git-scm.com"><img src="git-logo.svg" class="logo-img" style="height: 5ex;"></a></p>
+          <p><a href="https://github.com"><img src="github-logo.svg" class="logo-img" style="height: 5ex;"></a></p>
+        </section>
+        <section class="center">
+          <h2>Things to keep with you</h2>
+          <ul>
+            <li><a href="https://git-scm.com/docs">Git manual</a></li>
+            <li><a href="https://git-scm.com/book/en/v2"><img src="progit2.png" class="logo-img" style="height: 10ex;"></a></li>
+          </ul>
+        </section>
+        <section>
+          <h2>What is Git?</h2>
+          <p>A distributed version control system (DVCS)</p>
+          <p>Every commit is a <em>snapshot</em> of your files</p>
+          <img src="snapshots.svg" class="white-bg">
+        </section>
+        <section>
+          <h2>The three states</h2>
+          <p>Each tracked file can be in three states:</p>
+          <ul class="font75">
+            <li>Committed: the file is stored in the Git database</li>
+            <li>Modified: the file has been modified but not committed</li>
+            <li>Staged: the file has been put into the staging area, to be committed</li>
+          </ul>
+          <img src="areas.png" class="white-bg" style="height: 15ex">
+        </section>
+        <section class="center">
+          <h2>Getting started</h2>
+          <p>In each commit, Git stores the author and committer's name and email</p>
+          <p>You need to configure Git:</p>
+          <pre><code class="console" data-trim data-noescape>
+git config --global user.name "Your Name"
+git config --global user.email "your@email.com"
+          </code></pre>
+        </section>
+        <section class="center">
+          <h2>Setting your editor</h2>
+          <p>Git sometimes launches an editor e.g. when you <code>commit</code>, to edit the commit message</p>
+          <p>Configure your favourite editor:</p>
+          <pre><code class="console" data-trim data-noescape>
+git config --global core.editor nano
+git config --global core.editor emacs
+git config --global core.editor "code --wait --new-window" # VS Code
+git config --global core.editor "'C:/Program Files/Notepad++/notepad++.exe' -multiInst -nosession"
+git config --global core.editor "'C:/Program Files/Microsoft VS Code/code.exe' -n -w"
+          </code></pre>
+        </section>
+        <section class="center">
+          <h2>Git manual</h2>
+          <p class="mb0">You can always access the help for a command via</p>
+          <p class="mt0"><code>git help <u>cmd</u></code></p>
+          <p class="mb0">or access the help summary by</p>
+          <p class="mt0"><code>git <u>cmd</u> -h</code></p>
+        </section>
+        <section>
+          <h2>Initialising a repository</h2>
+          <p>Let's create a new Git repository.</p>
+          <pre><code class="console" data-trim data-noescape>
+<strong>$ mkdir my-git-repo</strong>
+<strong>$ cd my-git-repo</strong>
+<strong>$ git init</strong>
+Initialized empty Git repository in my-git-repo/.git/
+          </code></pre>
+        </section>
+        <section>
+          <h2>Stage a file</h2>
+          <p>Create a new file in <code>my-git-repo</code>, however you want. Then add it:</p>
+          <pre><code class="console" data-trim data-noescape>
+<strong>$ echo 'Hello world' > hello</strong>
+<strong>$ git add hello</strong>
+          </code></pre>
+        </section>
+        <section>
+          <h2>Check the status</h2>
+          <p>We've just staged a file! So what is the state of the repository?</p>
+          <pre><code class="console" data-trim data-noescape>
+<strong>$ git status</strong>
+On branch master
+
+No commits yet
+
+Changes to be committed:
+  (use "git rm --cached &lt;file&gt;..." to unstage)
+
+    new file:   hello
+          </code></pre>
+        </section>
+        <section>
+          <h2>Look at the staged diff</h2>
+          <p>What exactly did we stage?</p>
+          <pre><code class="console" data-trim data-noescape>
+<strong>$ git diff --staged</strong>
+diff --git a/hello b/hello
+new file mode 100644
+index 0000000..802992c
+--- /dev/null
++++ b/hello
+@@ -0,0 +1 @@
++Hello world
+          </code></pre>
+        </section>
+        <section>
+          <h2>Make your first commit</h2>
+          <pre><code class="console" data-trim data-noescape>
+<strong>$ git commit <span class="fragment mark" data-fragment-index="0">-m "Add hello"</span></strong>
+[master (root-commit) 5d74ce3] Add hello
+ 1 file changed, 1 insertion(+)
+ create mode 100644 hello
+          </code></pre>
+          <p class="fragment" data-fragment-index="0">You can leave the <mark>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</mark> part out. Git will open your editor for you to compose a commit message.</p>
+        </section>
+        <section>
+          <h2>Look at your commit</h2>
+          <pre><code class="console" data-trim data-noescape>
+<strong>$ git show</strong>
+commit dc37b1cb2627f9829db0072cfa7d3d6bf9eb6822 (HEAD -> master)
+Author: Your Name &lt;your@email.com&gt;
+Date:   Sat May 9 21:16:45 2020 +0800
+
+    Add hello
+
+diff --git a/hello b/hello
+new file mode 100644
+index 0000000..802992c
+--- /dev/null
++++ b/hello
+@@ -0,0 +1 @@
++Hello world
+          </code></pre>
+        </section>
+        <section>
+          <h2>Make some changes, and look at them</h2>
+          <p>Make edits to <code>hello</code> (or whatever file you made), then</p>
+          <pre><code class="console" data-trim data-noescape>
+<strong>$ git diff</strong>
+diff --git a/hello b/hello
+index 802992c..5d56d4d 100644
+--- a/hello
++++ b/hello
+@@ -1 +1 @@
+-Hello world
++Hello Orbital!
+          </code></pre>
+        </section>
+        <section>
+          <h2>Summary so far</h2>
+          <ul class="font75">
+            <li><a href="https://git-scm.com/docs/git-init"><code>git init</code></a>: Initialise repository</li>
+            <li><a href="https://git-scm.com/docs/git-add"><code>git add</code></a>: Stage changes</li>
+            <li><code><a href="https://git-scm.com/docs/git-diff">git diff</a> <a href="https://git-scm.com/docs/git-diff#Documentation/git-diff.txt-emgitdiffemltoptionsgt--ltpathgt82308203">(--staged)</a></code>: Look at differences between working tree and index (<code>--staged</code>: index and current commit)</li>
+            <li><a href="https://git-scm.com/docs/git-status"><code>git status</code></a>: Look at repository status</li>
+            <li><code><a href="https://git-scm.com/docs/git-commit">git commit</a> <a href="https://git-scm.com/docs/git-commit#Documentation/git-commit.txt--mltmsggt">(-m)</a></code>: Commit staged changes (<code>-m</code>: with this commit message)</li>
+            <li><a href="https://git-scm.com/docs/git-show"><code>git show</code></a>: Show current commit</li>
+          </ul>
+          <p>The commands' manuals are linked. (They all have <em>many</em> more options than what we've covered.)</p>
+        </section>
+        <section>
+          <h2>Viewing commit history</h2>
+          <pre><code class="console" data-trim data-noescape>
+<strong>$ git log</strong>
+commit 19c32155172a20f2fd14fe0e6c0fea954c17296b (HEAD -&gt; master)
+Author: Your Name &lt;your@email.com&gt;
+Date:   Sat May 9 21:36:58 2020 +0800
+
+    Change hello to Orbital!
+
+commit dc37b1cb2627f9829db0072cfa7d3d6bf9eb6822
+Author: Your Name &lt;your@email.com&gt;
+Date:   Sat May 9 21:16:45 2020 +0800
+
+    Add hello
+          </code></pre>
+        </section>
+        <section>
+          <section>
+            <h2>Ignoring files</h2>
+            <p>Sometimes we don't want Git to track a certain file</p>
+            <pre><code class="console" data-trim data-noescape>
+<strong>$ touch ignore-me</strong>
+<strong>$ git status</strong>
+On branch master
+Untracked files:
+  (use "git add &lt;file&gt;..." to include in what will be committed)
+
+	ignore-me
+
+nothing added to commit but untracked files present (use "git add" to track)
+            </code></pre>
+          </section>
+          <section>
+            <h2>Ignoring files</h2>
+            <p>We can add it to <code>.gitignore</code></p>
+            <pre><code class="console" data-trim data-noescape>
+<strong>$ echo "/ignore-me" &gt;&gt; .gitignore</strong>
+<strong>$ git status</strong>
+On branch master
+Untracked files:
+  (use "git add &lt;file&gt;..." to include in what will be committed)
+
+	.gitignore
+
+nothing added to commit but untracked files present (use "git add" to track)
+            </code></pre>
+            <p><code>.gitignore</code> should be committed.</p>
+          </section>
+          <section>
+            <h2>Ignoring files</h2>
+            <pre><code class="console" data-trim data-noescape>
+<strong>$ git add .gitignore &amp;&amp; git commit -m "Add .gitignore"</strong>
+[master 5ada1cf] Add .gitignore
+ 1 file changed, 1 insertion(+)
+ create mode 100644 .gitignore
+<strong>$ git status</strong>
+On branch master
+nothing to commit, working tree clean
+<strong>$ git status --ignored</strong>
+On branch master
+Ignored files:
+  (use "git add -f &lt;file&gt;..." to include in what will be committed)
+
+	ignore-me
+
+nothing to commit, working tree clean
+            </code></pre>
+          </section>
+          <section>
+            <h2>What to ignore?</h2>
+            <p>Typically, we ignore files like build artifacts and generated files that are usually derived from the human-authored code in the repository. E.g.</p>
+            <ul>
+              <li>dependency caches like <code>/node_modules</code></li>
+              <li>compiled code like <code>.o</code>, <code>.pyc</code> files</li>
+              <li>build output directories like <code>/bin</code>, <code>/out</code></li>
+              <li>runtime-generated files like log files</li>
+              <li>personal configuration files e.g. of your IDE</li>
+            </ul>
+          </section>
+          <section>
+            <h2><code>.gitignore</code> format</h2>
+            <pre><code class="console" data-trim data-noescape>
+/logs/*/*.log
+/logs/**/*.log
+**/logs
+**/logs/debug.log
+*.log
+/debug.log
+debug.log
+            </code></pre>
+            <p><a href="https://git-scm.com/docs/gitignore#_pattern_format">See the full pattern format.</a></p>
+          </section>
+        </section>
+        <section>
+          <h1>Branching and collaboration</h1>
+        </section>
+        <section class="font75">
+          <h2>Branches</h2>
+          <p>... let you have multiple lines of development happen simultaneously.</p>
+          <p>In Git, branching is extremely fast and lightweight. A branch is simply a pointer to a commit; the default branch is typically <code>master</code>.</p>
+          <p><code>HEAD</code> is a special pointer to the branch you are currently on.</p>
+          <img src="head-to-master.png" class="white-bg" style="height: 20ex;">
+        </section>
+        <section>
+          <section>
+            <h2>Creating a branch</h2>
+            <pre><code class="console" data-trim data-noescape>
+<strong>$ git checkout -b new-feature</strong>
+Switched to a new branch 'new-feature'
+<strong>$ git show</strong>
+commit 5ada... (HEAD -&gt; new-feature, master)
+Author: Your Name &lt;your@email.com&gt;
+Date:   Sat May 9 21:44:32 2020 +0800
+
+    Add .gitignore
+            </code></pre>
+            <p>Alternatively:</p>
+            <pre><code class="console" data-trim data-noescape>
+<strong>$ git branch new-feature</strong>
+<strong>$ git checkout new-feature</strong>
+Switched to branch 'new-feature'
+            </code></pre>
+          </section>
+          <section>
+            <h2>Creating a branch</h2>
+            <img src="branch-1.svg" class="white-bg">
+          </section>
+        </section>
+        <section>
+          <h2>Listing branches</h2>
+          <pre><code class="console" data-trim data-noescape>
+<strong>$ git branch</strong>
+  master
+* new-feature
+          </code></pre>
+        </section>
+        <section>
+          <h2>Changing branches</h2>
+          <pre><code class="console" data-trim data-noescape>
+<strong>$ git checkout master</strong>
+Switched to branch 'master'
+          </code></pre>
+        </section>
+        <section>
+          <section>
+            <h2>Fast-forward merging</h2>
+            <p>Let's develop <code>new-feature</code> a bit, then merge it back to <code>master</code>.</p>
+            <pre><code class="console" data-trim data-noescape>
+<strong>$ echo "bye" &gt; bye</strong>
+<strong>$ git add bye &amp;&amp; git commit -m "Add farewell"</strong>
+[new-feature b53e9cf] Add farewell
+ 1 file changed, 1 insertion(+)
+ create mode 100644 bye
+            </code></pre>
+          </section>
+          <section>
+            <h2>Fast-forward merging</h2>
+            <img src="branch-2.svg" class="white-bg">
+          </section>
+          <section>
+            <h2>Fast-forward merging</h2>
+            <pre><code class="console" data-trim data-noescape>
+<strong>$ git checkout master</strong>
+Switched to branch 'master'
+<strong>$ git merge new-feature</strong>
+Updating 5ada1cf..b53e9cf
+Fast-forward
+ bye | 1 +
+ 1 file changed, 1 insertion(+)
+ create mode 100644 bye
+            </code></pre>
+          </section>
+          <section>
+            <h2>Fast-forward merging</h2>
+            <img src="branch-3.svg" class="white-bg">
+          </section>
+        </section>
+        <section>
+          <h2>Deleting branches</h2>
+          <p>Now that we're done with <code>new-feature</code>, we can delete it.</p>
+          <pre><code class="console" data-trim data-noescape>
+<strong>$ git branch -d new-feature</strong>
+Deleted branch new-feature (was b53e9cf).
+          </code></pre>
+        </section>
+        <section>
+          <section>
+            <h2>Cloning repositories</h2>
+            <p>We're going to clone a repository to use later on. Go to <a href="https://github.com/orb2020-git/merge-conflict">merge-conflict</a>, and look for this:</p>
+            <img src="github-clone-url.png" style="height: 20ex;">
+          </section>
+          <section>
+            <h2>Cloning repositories</h2>
+            <pre><code class="console" data-trim data-noescape>
+<strong>$ git clone https://github.com/orb2020-git/merge-conflict.git</strong>
+Cloning into 'merge-conflict'...
+remote: Enumerating objects: 18, done.
+remote: Counting objects: 100% (18/18), done.
+remote: Compressing objects: 100% (10/10), done.
+remote: Total 18 (delta 0), reused 18 (delta 0), pack-reused 0
+Unpacking objects: 100% (18/18), done.
+<strong>$ cd merge-conflict/</strong>
+<strong>$ ls</strong>
+bye  hello
+            </code></pre>
+          </section>
+        </section>
+        <section>
+          <h2>Merge conflicts setup</h2>
+          <p>First, checkout <code>conflict-1</code> and <code>conflict-2</code> to create your local copies of the branches. Then go back to <code>master</code>.</p>
+          <pre><code class="console" data-trim data-noescape>
+<strong>$ git checkout conflict-1</strong>
+Branch 'conflict-1' set up to track remote branch 'conflict-1' from 'origin'.
+Switched to a new branch 'conflict-1'
+<strong>$ git checkout conflict-2</strong>
+Branch 'conflict-2' set up to track remote branch 'conflict-2' from 'origin'.
+Switched to a new branch 'conflict-2'
+<strong>$ git checkout master</strong>
+Switched to branch 'master'
+Your branch is up to date with 'origin/master'.
+          </code></pre>
+        </section>
+        <section>
+          <section>
+            <h2>Merge conflicts</h2>
+            <img src="conflict-1.svg" class="white-bg">
+          </section>
+          <section>
+            <h2>Merge conflicts</h2>
+            <pre><code class="console" data-trim data-noescape>
+$ git log --graph --all
+* commit ba119655f9009085d5f3fd72cf29787fe1aef05f (origin/conflict-2)
+| Author: Your Name &lt;your@email.com&gt;
+| Date:   Sun May 10 00:15:38 2020 +0800
+|
+|     Change bye to farewell
+|
+| * commit 87a92c314d38f8941f61053991086d16f08a5d6f (origin/conflict-1)
+|/  Author: Your Name &lt;your@email.com&gt;
+|   Date:   Sun May 10 00:15:15 2020 +0800
+|
+|       Make bye more formal
+|
+* commit b53e9cfb656a633f207b6099bf413c08a0011af5 (HEAD -&gt; master, origin/master, origin/HEAD)
+            </code></pre>
+          </section>
+          <section>
+            <h2>Merge conflicts</h2>
+            <p>Now, try to merge <code>conflict-1</code> and <code>conflict-2</code> into <code>master</code>.</p>
+            <pre><code class="console" data-trim data-noescape>
+<strong>$ git merge conflict-1</strong>
+Updating b53e9cf..87a92c3
+Fast-forward
+ bye | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+<strong>$ git merge conflict-2</strong>
+Auto-merging bye
+CONFLICT (content): Merge conflict in bye
+Automatic merge failed; fix conflicts and then commit the result.
+            </code></pre>
+            <p>Oh no! <span style="font-size: 50%; text-decoration: line-through;"><a href="https://xkcd.com/1597/">Time to delete everything and start over!</a></span></p>
+          </section>
+          <section>
+            <h2>Handling merge conflicts</h2>
+            <pre><code class="console" data-trim data-noescape>
+<strong>$ git status</strong>
+On branch master
+Your branch is ahead of 'origin/master' by 1 commit.
+  (use "git push" to publish your local commits)
+
+You have unmerged paths.
+  (fix conflicts and run "git commit")
+  (use "git merge --abort" to abort the merge)
+
+Unmerged paths:
+  (use "git add &lt;file&gt;..." to mark resolution)
+
+	both modified:   bye
+
+no changes added to commit (use "git add" and/or "git commit -a")
+            </code></pre>
+          </section>
+          <section>
+            <h2>Handling merge conflicts</h2>
+            <pre><code class="console" data-trim data-noescape>
+<strong>$ cat bye</strong>
+&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+<span class="fragment mark" data-fragment-index="0">Goodbye!</span>
+=======
+<span class="fragment mark-red" data-fragment-index="1">Farewell!</span>
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; conflict-2
+            </code></pre>
+          <p class="fragment" data-fragment-index="0"><span class="mark">What we have in <code>master</code></span></p>
+          <p class="fragment" data-fragment-index="1"><span class="mark-red">What we want to merge in <code>conflict-2</code></span></p>
+          </section>
+          <section>
+            <h2>Handling merge conflicts</h2>
+            <p>Fix the merge conflict however you'd like, then commit.</p>
+            <pre><code class="console" data-trim data-noescape>
+<strong>$ echo 'Farewell!' &gt; bye</strong>
+<strong>$ git add bye &amp;&amp; git commit</strong>
+[master 00e746b] Merge branch 'conflict-2'
+<strong>$ git show</strong>
+commit 00e746be657f4ca8e2adde376d09dd6af0533008 (HEAD -&gt; master)
+Merge: 87a92c3 ba11965
+Author: Your Name &lt;your@email.com&gt;
+Date:   Sun May 10 00:43:12 2020 +0800
+
+    Merge branch 'conflict-2'
+            </code></pre>
+          </section>
+          <section>
+            <h2>Handling merge conflicts</h2>
+            <img src="conflict-2.svg" class="white-bg">
+          </section>
+        </section>
+        <section>
+          <section>
+            <h2>Creating a new GitHub repository</h2>
+            <img src="github-new.png">
+          </section>
+          <section>
+            <h2>Creating a new GitHub repository</h2>
+            <img src="github-new-2.png">
+          </section>
+          <section>
+            <h2>Creating a new GitHub repository</h2>
+            <img src="github-new-3.png" style="height: 22ex;">
+          </section>
+          <section>
+            <h2>Pushing to a new GitHub repository</h2>
+            <pre><code class="console" data-trim data-noescape>
+<strong>$ mkdir my-new-repo &amp;&amp; cd my-new-repo</strong>
+<strong>$ git init</strong>
+Initialized empty Git repository in /tmp/my-new-repo/.git/
+<strong>$ echo 'Hello world!' &gt; hello</strong>
+<strong>$ git add hello &amp;&amp; git commit -m "Initial commit"</strong>
+[master (root-commit) 18cac44] Initial commit
+ 1 file changed, 1 insertion(+)
+ create mode 100644 hello
+<strong>$ git remote add origin git@github.com:.../my-new-repo.git</strong>
+<strong>$ git push -u origin master</strong>
+Enumerating objects: 3, done.
+Counting objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 220 bytes | 220.00 KiB/s, done.
+Total 3 (delta 0), reused 0 (delta 0)
+To github.com:.../my-new-repo.git
+ * [new branch]      master -&gt; master
+Branch 'master' set up to track remote branch 'master' from 'origin'.
+            </code></pre>
+          </section>
+        </section>
+        <section>
+          <section>
+            <h2>Updating your repository</h2>
+            <pre><code class="console" data-trim data-noescape>
+<strong>$ git pull origin master</strong>
+From https://github.com/orb2020-git/fork-me
+ * branch            master     -&gt; FETCH_HEAD
+Already up to date.
+            </code></pre>
+            <p>Alternatively, if your branch is tracking a remote:</p>
+            <pre><code class="console" data-trim data-noescape>
+<strong>$ git pull</strong>
+Already up to date.
+            </code></pre>
+            <p><code>pull</code> is roughly equivalent to a <code>fetch</code> and <code>merge</code>.</p>
+            <p>So if there are merge conflicts, you handle them as you did earlier.</p>
+          </section>
+          <section>
+            <h2>Updating with rebase</h2>
+            <pre><code class="console" data-trim data-noescape>
+<strong>$ git pull --rebase</strong>
+Already up to date.
+            </code></pre>
+          </section>
+          <section>
+            <h2>Rebase vs merge</h2>
+            <p><img src="conflict-rebase-1.svg" class="white-bg"></p>
+            <p><img src="conflict-rebase-2.svg" class="white-bg"></p>
+          </section>
+        </section>
+        <section>
+          <h2>HTTPS vs SSH</h2>
+          <p>It doesn't really matter.</p>
+          <p>Use HTTPS if you don't have an SSH key set up with GitHub, or if it is a repository that you cannot write to.</p>
+          <p>Use SSH if you have an SSH key set up, and you can write to the repository.</p>
+        </section>
+        <section>
+          <h2>Forking and PR setup</h2>
+          <p>Clone this repository: <a href="https://github.com/orb2020-git/fork-me">fork-me</a>.</p>
+          <pre><code class="console" data-trim data-noescape>
+$ git clone https://github.com/orb2020-git/fork-me.git
+Cloning into 'fork-me'...
+remote: Enumerating objects: 3, done.
+remote: Counting objects: 100% (3/3), done.
+remote: Total 3 (delta 0), reused 3 (delta 0), pack-reused 0
+Unpacking objects: 100% (3/3), done.
+          </code></pre>
+        </section>
+        <section>
+          <section>
+            <h2>Forking and PR</h2>
+            <p>You've made some improvements, and now you want it upstreamed!</p>
+            <pre><code class="console" data-trim data-noescape>
+$ cd fork-me/
+$ nano hello # Edit hello
+$ git add hello &amp;&amp; git commit -m "Improve hello"
+[master df48f95] Improve hello
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+            </code></pre>
+          </section>
+          <section>
+            <h2>Forking and PR</h2>
+            <p>Fork the repository:</p>
+            <img src="github-fork-1.png">
+          </section>
+          <section>
+            <h2>Forking and PR</h2>
+            <p>Get the URL:</p>
+            <img src="github-fork-2.png">
+          </section>
+          <section>
+            <h2>Update your repository</h2>
+            <p>Make sure there haven't been new changes made to the upstream.</p>
+            <pre><code class="console" data-trim data-noescape>
+<strong>$ git pull --rebase</strong>
+Already up to date.
+            </code></pre>
+            <p>We use <code>--rebase</code> because merge commits are generally frowned-upon in GitHub-style PRs.</p>
+          </section>
+          <section>
+            <h2>Forking and PR</h2>
+            <p>Add the remote, and push</p>
+            <pre><code class="console" data-trim data-noescape>
+$ git remote add fork git@github.com:.../fork-me.git
+$ git push fork master
+Enumerating objects: 5, done.
+Counting objects: 100% (5/5), done.
+Writing objects: 100% (3/3), 248 bytes | 248.00 KiB/s, done.
+Total 3 (delta 0), reused 0 (delta 0)
+To github.com:.../fork-me.git
+   18cac44..df48f95  master -&gt; master
+            </code></pre>
+          </section>
+          <section>
+            <h2>Forking and PR</h2>
+            <img src="github-fork-3.png">
+          </section>
+          <section>
+            <h2>Forking and PR</h2>
+            <img src="github-fork-4.png">
+          </section>
+          <section>
+            <h2>Forking and PR</h2>
+            <img src="github-fork-5.png">
+          </section>
+        </section>
+        <section>
+          <section>
+            <h2>Commit message discipline</h2>
+            <p>First line: 80-character title, phrased imperatively</p>
+            <p>Then if your change is complex, elaborate on the change in prose.</p>
+            <pre class="font45"><code class="nohighlight" data-trim data-noescape>
+<strong>Change greeting from "Hi" to "Hello"</strong>
+
+"Hi" is a bit too informal for a greeting. We should change it to "Hello" instead,
+so that our users don't feel like we are being too informal. Blah blah blah blah.
+Blah blah.
+            </code></pre>
+          </section>
+          <section>
+            <h2>A real commit message</h2>
+            <p><a href="https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=37c0aead7902b1ddf1b668e1ab74c80b9a7fd183">Randomly chosen from the Linux kernel.</a></p>
+            <pre class="font45"><code class="nohighlight" data-trim data-noescape>
+<strong>net_sched: sch_fq: handle non connected flows</strong>
+
+FQ packet scheduler assumed that packets could be classified
+based on their owning socket.
+
+This means that if a UDP server uses one UDP socket to send
+packets to different destinations, packets all land
+in one FQ flow.
+
+This is unfair, since each TCP flow has a unique bucket, meaning
+that in case of pressure (fully utilised uplink), TCP flows
+have more share of the bandwidth.
+
+If we instead detect unconnected sockets, we can use a stochastic
+hash based on the 4-tuple hash.
+
+This also means a QUIC server using one UDP socket will properly
+spread the outgoing packets to different buckets, and in-kernel
+pacing based on EDT model will no longer risk having big rb-tree on
+one flow.
+
+Note that UDP application might provide the skb-&gt;hash in an
+ancillary message at sendmsg() time to avoid the cost of a dissection
+in fq packet scheduler.
+
+Signed-off-by: Eric Dumazet &lt;edumazet@google.com&gt;
+Signed-off-by: David S. Miller &lt;davem@davemloft.net&gt;
+            </code></pre>
+          </section>
+        </section>
+        <section>
+          <section>
+            <h2>For Orbital</h2>
+            <p>You'll be working mostly with just one other person.</p>
+            <p>You will probably both work on the main (<code>master</code>) branch together. Two people is small enough that merge conflicts shouldn't be too frequent.</p>
+            <p>Keep a good commit history. It will be useful once you have a substantial codebase and want to figure out why you did something, etc.</p>
+          </section>
+          <section>
+            <h2>GitHub tip</h2>
+            <p>You can <a href="https://github.com/nushackers/nushackers-site/pull/252">pull request between branches in the same repository</a>.</p>
+            <p>This is useful if you want your partner to review something before merging, or if you set up automated CI checks, etc.</p>
+            <img src="github-pr-1.png" style="height: 12ex">
+          </section>
+        </section>
+        <section>
+          <h2>Summary since the last summary</h2>
+          <ul class="font75">
+            <li><a href="https://git-scm.com/docs/git-log"><code>git log</code></a>: View the log</li>
+            <li><code>.gitignore</code>: Ignore files</li>
+            <li><code><a href="https://git-scm.com/docs/git-checkout">git checkout</a></code>: Checkout a branch (and also files, etc)</li>
+            <li><a href="https://git-scm.com/docs/git-merge"><code>git merge</code></a>: Merge a branch</li>
+            <li><code><a href="https://git-scm.com/docs/git-clone">git clone</a></code>: Clone a remote repository</li>
+            <li><a href="https://git-scm.com/docs/git-remote"><code>git remote</code></a>: Manage remotes</li>
+            <li><a href="https://git-scm.com/docs/git-push"><code>git push</code></a>: Push your branch to a remote</li>
+            <li><a href="https://git-scm.com/docs/git-pull"><code>git pull</code></a>: Pull updates from a remote to your repository</li>
+          </ul>
+        </section>
+        <section>
+          <h2>Where to go from here?</h2>
+          <p>Some slightly more advanced but common commands:</p>
+          <ul class="font75">
+            <li><a href="https://git-scm.com/docs/git-revert"><code>git revert</code></a>: Create a commit to revert a commit</li>
+            <li><a href="https://git-scm.com/docs/git-reset"><code>git reset</code></a>: Unstage files, change the commit a branch is on, etc.</li>
+            <li><a href="https://git-scm.com/docs/git-cherry-pick"><code>git cherry-pick</code></a>: Apply a single commit from another branch</li>
+            <li><a href="https://git-scm.com/docs/git-rebase"><code>git rebase (-i)</code></a>: Rebase a branch onto another</li>
+            <li><a href="https://git-scm.com/docs/git-bisect"><code>git bisect</code></a>: Find the first commit with a bug, etc</li>
+          </ul>
+        </section>
+        <section class="center">
+          <h2>End</h2>
+        </section>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.1/build/highlight.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/highlightjs-line-numbers.js@2.7.0/src/highlightjs-line-numbers.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@3.9.2/js/reveal.min.js"></script>
+
+    <script>
+      // More info about config & dependencies:
+      // - https://github.com/hakimel/reveal.js#configuration
+      // - https://github.com/hakimel/reveal.js#dependencies
+      Reveal.initialize({
+        dependencies: [{ src: "../reveal-highlight.js", async: true }],
+        slideNumber: true,
+        fragmentInURL: true,
+        transitionSpeed: 'fast',
+        // center: false,
+        hash: true,
+        navigationMode: 'linear',
+        pdfSeparateFragments: false,
+        highlight: {
+          escapeHTML: false
+        }
+      });
+    </script>
+  </body>
+</html>
